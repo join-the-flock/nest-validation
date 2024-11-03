@@ -38,7 +38,7 @@ jobs:
           python-version: '3.12'
 
       - name: Apply Nest patches to Flock
-        working-directory: nest
+        working-directory: ..
         run: ./tools/import-patches.py
 
       - name: Push Flock changes to Flock repo for PR
