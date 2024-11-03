@@ -41,7 +41,6 @@ jobs:
           python-version: '3.12'
 
       - name: Apply Nest patches to Flock
-        working-directory: ..
         run: |
           echo "Importing patches into Flock from /nest"
           pwd
