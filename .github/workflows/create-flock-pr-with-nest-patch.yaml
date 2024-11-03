@@ -45,7 +45,7 @@ jobs:
           echo "Importing patches into Flock from /nest"
           pwd
           echo `ls -la`
-          tools/git-import-patches
+          nest/tools/git-import-patches
 
       - name: Push Flock changes to Flock repo for PR
         run: |
