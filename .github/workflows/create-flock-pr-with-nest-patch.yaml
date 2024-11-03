@@ -32,10 +32,12 @@ jobs:
         working-directory: nest/flock
         run: git checkout -b pr_workflow_test
 
-      - name: Apply Nest patches to Flock
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Apply Nest patches to Flock
         working-directory: nest
         run: ./tools/import-patches.py
 
