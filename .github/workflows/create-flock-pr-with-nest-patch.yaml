@@ -34,8 +34,8 @@ jobs:
 
       - name: Apply Nest patches to Flock
         uses: actions/setup-python@v5
-          with:
-            python-version: '3.12'
+        with:
+          python-version: '3.12'
         working-directory: nest
         run: ./tools/import-patches.py
 
