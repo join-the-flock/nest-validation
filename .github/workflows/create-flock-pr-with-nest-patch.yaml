@@ -40,6 +40,7 @@ jobs:
         run: ./tools/import-patches.py
 
       - name: Push Flock changes to Flock repo for PR
+        run: |
         git push origin pr_workflow_test
 
         # Store the PAT in a file that can be accessed by the
