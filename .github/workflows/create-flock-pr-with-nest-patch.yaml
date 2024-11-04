@@ -61,6 +61,11 @@ jobs:
           gh auth login --with-token < token.txt
           gh pr create \
             --title "${{ github.event.pull_request.title }}" \
-            --body "${{ github.event.pull_request.description }}\n\n---\n\nThis Flock PR is derived from the patch in the following Nest PR: \nhttps://github.com/join-the-flock/nest/pull/${{ github.event.number }}" \
+            --body "${{ github.event.pull_request.body }}
+
+---
+
+This Flock PR is derived from the patch in the following Nest PR: 
+${{ github.event.pull_request.url }}" \
             --head "${{ github.event.pull_request.head.ref }}" \
             --base "master"
