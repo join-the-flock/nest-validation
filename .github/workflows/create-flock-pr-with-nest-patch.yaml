@@ -60,6 +60,7 @@ jobs:
           tools/git-import-patches patches
 
       - name: Push Flock changes to Flock repo for PR
+        working-directory: nest/flock
         run: |
           git push origin pr_workflow_test
 
