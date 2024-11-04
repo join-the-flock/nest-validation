@@ -70,7 +70,7 @@ jobs:
           # GitHub CLI.
           echo "${{ secrets.REPO_WORKFLOW_PAT }}" > token.txt
 
-          git remote set-url origin https://${{ secrets.REPO_WORKFLOW_PAT }}@github.com/join-the-flock/flock.git
+          git remote set-url origin https://${{ secrets.REPO_WORKFLOW_PAT }}@github.com/join-the-flock/flock
 
           gh auth login --with-token < token.txt
 
