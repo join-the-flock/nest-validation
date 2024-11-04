@@ -28,6 +28,15 @@ jobs:
           ref: 'master'
           token: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Debug output
+        run: |
+          echo "Debug path output"
+          pwd
+          echo `ls -la`
+          echo ""
+          echo "/nest"
+          echo `ls -la nest`
+
       - name: Create branch for PR
         working-directory: nest/flock
         run: |
