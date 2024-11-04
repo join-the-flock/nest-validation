@@ -5,6 +5,8 @@ on:
       - main
 
 name: create-flock-pr-from-nest-patch
+permissions:
+  contents: write
 
 jobs:
   send-pull-requests:
