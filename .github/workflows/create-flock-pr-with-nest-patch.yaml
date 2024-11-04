@@ -55,6 +55,10 @@ jobs:
           pwd
           echo `ls -la`
           cd nest
+
+          git config --global user.email "nobody@getflocked.dev"
+          git config --global user.name "PR Bot"
+
           tools/git-import-patches patches
 
       - name: Push Flock changes to Flock repo for PR
