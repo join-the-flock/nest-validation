@@ -60,7 +60,7 @@ jobs:
           # create a pull-requests containing the updates.
           gh auth login --with-token < token.txt
           gh pr create \
-            --body "This PR body came from the workflow file" \
-            --title "This title came from the workflow file" \
-            --head "${{github.event.pull_request.head.ref}}" \
+            --title "${{ github.event.pull_request.title }}" \
+            --body "${{ github.event.pull_request.description }}\n\n---\n\nThis Flock PR is derived from the patch in the following Nest PR: \nhttps://github.com/join-the-flock/nest/pull/${{ github.event.number }}" \
+            --head "${{ github.event.pull_request.head.ref }}" \
             --base "master"
