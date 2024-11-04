@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0 # Checkout everything to get access to the tags
           repository: 'join-the-flock/flock'
           ref: 'master'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.REPO_WORKFLOW_PAT }}
       
       - name: Debug output
         run: |
