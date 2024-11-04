@@ -72,8 +72,6 @@ jobs:
 
           git remote set-url origin https://${{ secrets.REPO_WORKFLOW_PAT }}@github.com/join-the-flock/flock
 
-          gh auth login --with-token < token.txt
-
           echo "Remote: `git remote -v`"
           echo " "
 
@@ -81,6 +79,8 @@ jobs:
           echo " "
 
           git push origin pr_workflow_test
+
+          gh auth login --with-token < token.txt
 
           # # Authorize GitHub CLI for the current repository and
           # # create a pull-requests containing the updates.
