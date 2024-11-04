@@ -29,21 +29,10 @@ jobs:
           repository: 'join-the-flock/flock'
           ref: 'master'
           token: ${{ secrets.REPO_WORKFLOW_PAT }}
-      
-      - name: Debug output
-        run: |
-          echo "Debug path output"
-          pwd
-          echo `ls -la`
-          echo ""
-          echo "/nest"
-          echo `ls -la nest`
 
       - name: Create branch for PR
         working-directory: nest/flock
         run: |
-          echo "Creating branch for PR"
-          pwd
           git config --global user.email "nobody@getflocked.dev"
           git config --global user.name "PR Bot"
           git checkout -b pr_workflow_test
@@ -55,34 +44,19 @@ jobs:
 
       - name: Apply Nest patches to Flock
         run: |
-          echo "Importing patches into Flock from /nest"
-          pwd
-          echo `ls -la`
           cd nest
           tools/git-import-patches patches
 
       - name: Push Flock changes to Flock repo for PR
         working-directory: nest/flock
         run: |
-          echo "Trying to push PR branch to Flock repo..."
-          echo "WD: `pwd`"
-          echo " "
-
           # Store the PAT in a file that can be accessed by the
           # GitHub CLI.
           echo "${{ secrets.REPO_WORKFLOW_PAT }}" > token.txt
 
-          git remote set-url origin https://${{ secrets.REPO_WORKFLOW_PAT }}@github.com/join-the-flock/flock
-
-          echo "Remote: `git remote -v`"
-          echo " "
-
-          echo "Local branch: `git branch --show-current`"
-          echo " "
+          # git remote set-url origin https://${{ secrets.REPO_WORKFLOW_PAT }}@github.com/join-the-flock/flock
 
           git push origin pr_workflow_test
-
-          gh auth login --with-token < token.txt
 
           # Authorize GitHub CLI for the current repository and
           # create a pull-requests containing the updates.
