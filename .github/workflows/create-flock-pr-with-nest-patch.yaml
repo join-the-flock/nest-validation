@@ -62,6 +62,7 @@ jobs:
       - name: Push Flock changes to Flock repo for PR
         working-directory: nest/flock
         run: |
+          gh auth login --with-token < token.txt
           git push origin pr_workflow_test
 
           # Store the PAT in a file that can be accessed by the
