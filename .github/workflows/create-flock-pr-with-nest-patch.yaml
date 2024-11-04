@@ -61,11 +61,11 @@ jobs:
           gh auth login --with-token < token.txt
 
           # Save the PR description to a file so that we can insert newlines.
-          echo "${{ github.event.pull_request.body }}\n\n---\n\nThis Flock PR is derived from the patch in the following Nest PR: \n${{ github.event.pull_request.url }}" > pr_descpription
+          echo "${{ github.event.pull_request.body }}\n\n---\n\nThis Flock PR is derived from the patch in the following Nest PR: \n${{ github.event.pull_request.url }}" > pr_descpription.txt
 
           # Create the PR.
           gh pr create \
             --title "${{ github.event.pull_request.title }}" \
-            --body-file pr_description \
+            --body-file "pr_description.txt" \
             --head "${{ github.event.pull_request.head.ref }}" \
             --base "master"
