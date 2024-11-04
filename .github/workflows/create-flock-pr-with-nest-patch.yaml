@@ -54,7 +54,7 @@ jobs:
           # GitHub CLI.
           echo "${{ secrets.REPO_WORKFLOW_PAT }}" > token.txt
 
-          git push origin pr_workflow_test
+          git push origin ${{github.event.pull_request.head.ref}}
 
           # Authorize GitHub CLI for the current repository and
           # create a pull-requests containing the updates.
@@ -62,5 +62,5 @@ jobs:
           gh pr create \
             --body "This PR body came from the workflow file" \
             --title "This title came from the workflow file" \
-            --head "pr_workflow_test" \
+            --head "${{github.event.pull_request.head.ref}}" \
             --base "master"
