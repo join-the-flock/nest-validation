@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  send-pull-requests:
+  create-flock-pr-from-nest-patch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Nest
@@ -30,12 +30,12 @@ jobs:
           ref: 'master'
           token: ${{ secrets.REPO_WORKFLOW_PAT }}
 
-      - name: Create branch for PR
+      - name: Create branch for Flock PR
         working-directory: nest/flock
         run: |
-          git config --global user.email "nobody@getflocked.dev"
-          git config --global user.name "PR Bot"
-          git checkout -b pr_workflow_test
+          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git checkout -b ${{github.event.pull_request.head.ref}}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -53,8 +53,6 @@ jobs:
           # Store the PAT in a file that can be accessed by the
           # GitHub CLI.
           echo "${{ secrets.REPO_WORKFLOW_PAT }}" > token.txt
-
-          # git remote set-url origin https://${{ secrets.REPO_WORKFLOW_PAT }}@github.com/join-the-flock/flock
 
           git push origin pr_workflow_test
 
