@@ -21,6 +21,15 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Look for Flock patch changes
+        run: |
+          git fetch origin ${{ github.base_ref }} 
+          if git diff --quiet origin/${{ github.base_ref }}...HEAD -- patches/; then
+            echo "No changes to Flock patches. Exiting workflow."
+            exit 0
+          else
+            echo "This PR includes Flock patch changes. Creating Flock PR for review."
+
       - name: Checkout Flock
         uses: actions/checkout@v4
         with:
