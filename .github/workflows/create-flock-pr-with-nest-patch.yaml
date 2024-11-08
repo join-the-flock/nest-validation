@@ -24,6 +24,7 @@ jobs:
       - name: Look for Flock patch changes
         run: |
           cd nest
+          git fetch origin ${{ github.base_ref }}
           if git diff --quiet origin/${{ github.base_ref }}...HEAD -- patches/; then
             echo "No changes to Flock patches. Exiting workflow."
             exit 0
