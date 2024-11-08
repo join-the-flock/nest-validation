@@ -27,12 +27,14 @@ jobs:
           git fetch origin ${{ github.base_ref }}
           if git diff --quiet origin/${{ github.base_ref }}...HEAD -- patches/; then
             echo "No changes to Flock patches. Exiting workflow."
-            exit 0
+            echo "has_patch_changes=false" >> $GITHUB_ENV
           else
             echo "This PR includes Flock patch changes. Creating Flock PR for review."
+            echo "has_patch_changes=true" >> $GITHUB_ENV
           fi
 
       - name: Checkout Flock
+        if: env.has_patch_changes == 'true'
         uses: actions/checkout@v4
         with:
           path: 'nest/flock'
@@ -42,6 +44,7 @@ jobs:
           token: ${{ secrets.REPO_WORKFLOW_PAT }}
 
       - name: Create branch for Flock PR
+        if: env.has_patch_changes == 'true'
         working-directory: nest/flock
         run: |
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
@@ -49,16 +52,19 @@ jobs:
           git checkout -b ${{github.event.pull_request.head.ref}}
 
       - name: Setup Python
+        if: env.has_patch_changes == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Apply Nest patches to Flock
+        if: env.has_patch_changes == 'true'
         run: |
           cd nest
           tools/git-import-patches patches
 
       - name: Push Flock changes to Flock repo for PR
+        if: env.has_patch_changes == 'true'
         working-directory: nest/flock
         run: |
           # Store the PAT in a file that can be accessed by the
