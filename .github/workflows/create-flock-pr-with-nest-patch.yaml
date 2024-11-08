@@ -30,6 +30,7 @@ jobs:
             exit 0
           else
             echo "This PR includes Flock patch changes. Creating Flock PR for review."
+          fi
 
       - name: Checkout Flock
         uses: actions/checkout@v4
