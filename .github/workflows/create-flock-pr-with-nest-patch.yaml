@@ -1,3 +1,20 @@
+# This workflow looks for changes to Flock patches within Nest, and then
+# creates a parallel PR in the Flock repository.
+#
+# Nest accumulates changes to Flutter in the form of patch files. These patch
+# files are plaid on top of Flutter to create a version called Flock. Reviewing
+# patch files in isolation is counterproductive, because developers can't see
+# any of the code around the changes. This workflow plays back the patches in
+# Nest and generates a PR against Flock showing that actual diff caused by
+# those patches.
+#
+# If a PR is submitted to Nest without any changes to patches, then this
+# workflow does nothing.
+#
+# After this workflow runs, go to github.com/join-the-flock/flock and locate
+# the new PR with the Flutter diff. Review the changes there. When satisfied
+# with the changes, close the PR in Flock, and merge the PR in Nest.
+
 on:
   pull_request:
     types: [opened, reopened]
