@@ -23,14 +23,6 @@ jobs:
           repository: ${{github.action_repository}}
           ref: ${{github.event.pull_request.head.ref}}
           token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Debug file system
-        run: |
-          echo "File system:"
-          echo `ls -la`
-          echo ""
-          echo ""
-          echo `ls -la nest`
 
       - name: Look for Flock patch changes
         run: |
@@ -53,6 +45,20 @@ jobs:
           repository: 'join-the-flock/flock'
           ref: 'master'
           token: ${{ secrets.REPO_WORKFLOW_PAT }}
+      
+      - name: Debug file system
+        run: |
+          echo "File system..."
+          echo "Root:"
+          echo `ls -la`
+          echo ""
+          echo ""
+          echo "Nest:"
+          echo `ls -la nest`
+          echo ""
+          echo ""
+          echo "Flock .gitignore:"
+          echo `cat nest/flock/.gitignore`
 
       - name: Create branch for Flock PR
         if: env.has_patch_changes == 'true'
