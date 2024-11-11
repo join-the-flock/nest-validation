@@ -30,6 +30,7 @@ from lib.patches import patch_from_dir
 
 
 def main(argv):
+  print("Running git-import-patches")
   parser = argparse.ArgumentParser()
   parser.add_argument("patch_dir",
       help="directory containing patches to apply")
@@ -37,6 +38,9 @@ def main(argv):
       action="store_true", dest='threeway',
       help="use 3-way merge to resolve conflicts")
   args = parser.parse_args(argv)
+
+  print("Patch")
+  print(patch_from_dir(args.patch_dir))
 
   git.import_patches(
       repo='./flock',
