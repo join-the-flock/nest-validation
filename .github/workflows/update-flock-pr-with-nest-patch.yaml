@@ -8,6 +8,8 @@ on:
       - main
 
 name: update-flock-pr-from-nest-patch
+env:
+  PYTHONUNBUFFERED: "1"
 permissions:
   contents: write
 
