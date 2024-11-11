@@ -55,10 +55,6 @@ jobs:
           echo ""
           echo "Nest:"
           echo `ls -la nest`
-          echo ""
-          echo ""
-          echo "Flock .gitignore:"
-          echo `cat nest/flock/.gitignore`
 
       - name: Create branch for Flock PR
         if: env.has_patch_changes == 'true'
@@ -67,6 +63,17 @@ jobs:
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
           git checkout -b ${{github.event.pull_request.head.ref}}
+
+          echo "Git status:"
+          echo `git status`
+          echo ""
+          echo ""
+          echo `git log -3`
+          echo ""
+          echo ""
+          echo "Flock .gitignore:"
+          echo `cat nest/flock/.gitignore`
+          echo ""
 
       - name: Setup Python
         if: env.has_patch_changes == 'true'
