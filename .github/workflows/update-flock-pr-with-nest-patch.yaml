@@ -20,7 +20,7 @@ jobs:
         with:
           path: 'nest'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: ${{github.action_repository}}
+          repository: ${{github.repository}}
           ref: ${{github.event.pull_request.head.ref}}
           token: ${{ secrets.GITHUB_TOKEN }}
 
