@@ -72,7 +72,7 @@ jobs:
           echo ""
           echo ""
           echo "Flock .gitignore:"
-          echo `cat nest/flock/.gitignore`
+          echo `cat .gitignore`
           echo ""
 
       - name: Setup Python
@@ -84,7 +84,14 @@ jobs:
       - name: Apply Nest patches to Flock
         if: env.has_patch_changes == 'true'
         run: |
+          echo "Apply patches..."
+          echo "Initial wd: `pwd`"
           cd nest
+          echo "Nest wd: `pwd`"
+          echo ""
+          echo ""
+          echo "Flutter .gitignore:"
+          echo `cat flock/.gitignore`
           tools/git-import-patches patches
 
       - name: Push Flock changes to Flock repo for PR
