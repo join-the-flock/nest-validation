@@ -1,32 +1,18 @@
-# This workflow looks for changes to Flock patches within Nest, and then
-# creates a parallel PR in the Flock repository.
-#
-# Nest accumulates changes to Flutter in the form of patch files. These patch
-# files are plaid on top of Flutter to create a version called Flock. Reviewing
-# patch files in isolation is counterproductive, because developers can't see
-# any of the code around the changes. This workflow plays back the patches in
-# Nest and generates a PR against Flock showing that actual diff caused by
-# those patches.
-#
-# If a PR is submitted to Nest without any changes to patches, then this
-# workflow does nothing.
-#
-# After this workflow runs, go to github.com/join-the-flock/flock and locate
-# the new PR with the Flutter diff. Review the changes there. When satisfied
-# with the changes, close the PR in Flock, and merge the PR in Nest.
+# This workflow is a continuation of "create-flock-pr-with-nest-patch.yaml", which
+# updates existing Flock PRs based on further commits to those PRs.
 
 on:
   pull_request:
-    types: [opened]
+    types: [synchronize, reopened]
     branches:
       - main
 
-name: create-flock-pr-from-nest-patch
+name: update-flock-pr-from-nest-patch
 permissions:
   contents: write
 
 jobs:
-  create-flock-pr-from-nest-patch:
+  update-flock-pr-from-nest-patch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Nest
@@ -88,18 +74,5 @@ jobs:
           # GitHub CLI.
           echo "${{ secrets.REPO_WORKFLOW_PAT }}" > token.txt
 
-          git push origin ${{github.event.pull_request.head.ref}}
-
-          # Authorize GitHub CLI for the current repository and
-          # create a pull-requests containing the updates.
-          gh auth login --with-token < token.txt
-
-          # Save the PR description to a file so that we can insert newlines.
-          echo -e "${{ github.event.pull_request.body }}\n\n---\n\nThis Flock PR is derived from the patch in the following Nest PR: \n${{ github.event.pull_request.url }}" > pr_description.txt
-
-          # Create the PR.
-          gh pr create \
-            --title "${{ github.event.pull_request.title }}" \
-            --body-file "pr_description.txt" \
-            --head "${{ github.event.pull_request.head.ref }}" \
-            --base "master"
+          # Force push to the existing PR branch.
+          git push -f origin ${{github.event.pull_request.head.ref}}
