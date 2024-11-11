@@ -23,6 +23,14 @@ jobs:
           repository: ${{github.action_repository}}
           ref: ${{github.event.pull_request.head.ref}}
           token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Debug file system
+        run: |
+          echo "File system:"
+          echo `ls -la`
+          echo ""
+          echo ""
+          echo `ls -la nest`
 
       - name: Look for Flock patch changes
         run: |
