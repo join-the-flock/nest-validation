@@ -64,7 +64,8 @@ jobs:
           git config --global user.name "${{ github.actor }}"
 
           # Delete existing PR branch.
-          git branch -D ${{github.event.pull_request.head.ref}}
+          # git fetch origin ${{github.event.pull_request.head.ref}}:${{github.event.pull_request.head.ref}}
+          # git branch -D ${{github.event.pull_request.head.ref}}
 
           # Create a new branch to replace the deleted one.
           git checkout -b ${{github.event.pull_request.head.ref}}
