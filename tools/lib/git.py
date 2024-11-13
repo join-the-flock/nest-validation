@@ -99,7 +99,7 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
   print("Running git patch command...")
 
   command = ['git'] + root_args + ['am'] + args
-  with subprocess.Popen(command, stdin=subprocess.PIPE) as proc:
+  with subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
     stdout, stderr = proc.communicate(patch_data.encode('utf-8'))
 
     # Print results
