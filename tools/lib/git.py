@@ -98,7 +98,7 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
   # command = 'git ' + ' '.join(root_args) + ' am ' + ' '.join(args) + '; git am --show-current-patch=diff'
   print("Running git patch command...")
 
-  command = ['git'] + root_args + ['am'] + args
+  command = ['git'] + root_args + ['am'] + args + [';', 'git', 'am', '--show-current-patch=diff']
   with subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
     stdout, stderr = proc.communicate(patch_data.encode('utf-8'))
 
