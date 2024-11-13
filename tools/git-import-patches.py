@@ -24,21 +24,13 @@
 
 import argparse
 import sys
-import logging
-import os
 
 from lib import git
 from lib.patches import patch_from_dir
 
 
 def main(argv):
-  print("HELLO?!")
-
-  logger = logging.getLogger("process")
-  logger.setLevel(logging.INFO)
-  logging.basicConfig(level=logging.INFO)
-
-  logger.info("Running git-import-patches", flush=True)
+  print("Running git-import-patches")
   parser = argparse.ArgumentParser()
   parser.add_argument("patch_dir",
       help="directory containing patches to apply")
@@ -47,8 +39,10 @@ def main(argv):
       help="use 3-way merge to resolve conflicts")
   args = parser.parse_args(argv)
 
-  logger.info("Patch", flush=True)
-  logger.info(patch_from_dir(args.patch_dir), flush=True)
+  print("Patch directory: " + args.patch_dir)
+  print("")
+  print("Patch:")
+  print(patch_from_dir(args.patch_dir))
 
   git.import_patches(
       repo='./flock',
