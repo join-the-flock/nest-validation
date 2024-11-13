@@ -34,6 +34,7 @@ import posixpath
 import re
 import subprocess
 import sys
+import time
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(SCRIPT_DIR)
@@ -94,11 +95,30 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
     root_args += ['-c', 'user.email=' + committer_email]
   root_args += ['-c', 'commit.gpgsign=false']
   command = ['git'] + root_args + ['am'] + args
-  with subprocess.Popen(command, stdin=subprocess.PIPE) as proc:
-    proc.communicate(patch_data.encode('utf-8'))
-    if proc.returncode != 0:
-      subprocess.Popen(['git', 'am', '--show-current-patch=diff'], stdin=subprocess.PIPE)
+  # command = 'git ' + ' '.join(root_args) + ' am ' + ' '.join(args)
+  # command = 'git ' + ' '.join(root_args) + ' am ' + ' '.join(args) + '; git am --show-current-patch=diff'
+  print("Running git patch command...")
 
+  command = ['git'] + root_args + ['am'] + args
+  with subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
+    stdout, stderr = proc.communicate(patch_data.encode('utf-8'))
+
+    # Print results
+    print("Output:")
+    print("-")
+    print(stdout.decode())
+    print("---")
+
+    print("Errors:")
+    print("-")
+    print(stderr.decode())
+    print("------------")
+
+    if proc.returncode != 0:
+      print("Failed to apply patch!")
+      # Sleep for a second so that all the process output above comes before this
+      # exception stacktrace in the logs.
+      time.sleep(1)
       raise RuntimeError(f"Command {command} returned {proc.returncode}")
 
 
