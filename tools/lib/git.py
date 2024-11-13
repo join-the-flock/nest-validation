@@ -105,29 +105,35 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
 
     # Print results
     print("Output:")
+    print("-")
     print(stdout.decode())
-    print("")
+    print("---")
 
     print("Errors:")
+    print("-")
     print(stderr.decode())
-    print("")
+    print("------------")
 
     if proc.returncode != 0:
-      print("Running git am check:")
-      with subprocess.Popen(['git', '-C', './flock', 'am', '--show-current-patch=diff'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc2:
+      print("Running git apply check:")
+      with subprocess.Popen(['git', '-C', './flock', 'apply', '--check', './patches/added_gclient_files_to_gitignore_to_support_flock_and_other_flutter.patch'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc2:
         stdout2, stderr2 = proc2.communicate(patch_data.encode('utf-8'))
 
         # Print results
         print("Output 2:")
+        print("-")
         print(stdout2.decode())
-        print("")
+        print("---")
 
         print("Errors 2:")
+        print("-")
         print(stderr2.decode())
         print("")
-      print("-----")
+      print("------------")
 
       print("Failed to apply patch!")
+      # Sleep for a second so that all the process output above comes before this
+      # exception stacktrace in the logs.
       time.sleep(1)
       raise RuntimeError(f"Command {command} returned {proc.returncode}")
 
