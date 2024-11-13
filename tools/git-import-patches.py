@@ -32,10 +32,7 @@ from lib.patches import patch_from_dir
 
 
 def main(argv):
-  print("HELLO?!", fluth=True)
-
-  with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-    print(f'HELLO FROM GITHUB OUTPUT FILE', file=fh)
+  print("HELLO?!")
 
   logger = logging.getLogger("process")
   logger.setLevel(logging.INFO)
