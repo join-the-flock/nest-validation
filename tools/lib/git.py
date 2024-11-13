@@ -95,7 +95,7 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
   root_args += ['-c', 'commit.gpgsign=false']
   command = ['git'] + root_args + ['am'] + args + ['; git am --show-current-patch=diff']
   print("Running git patch command...")
-  with subprocess.Popen(''.join(command), stdin=subprocess.PIPE) as proc:
+  with subprocess.Popen(' '.join(command), stdin=subprocess.PIPE) as proc:
     proc.communicate(patch_data.encode('utf-8'))
     if proc.returncode != 0:
       print("Failed to apply patch!")
