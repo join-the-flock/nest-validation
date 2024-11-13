@@ -97,7 +97,10 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
   with subprocess.Popen(command, stdin=subprocess.PIPE) as proc:
     proc.communicate(patch_data.encode('utf-8'))
     if proc.returncode != 0:
+      print("Failed to apply patch...")
+      print("Running 'git am --show-current-patch=diff'")
       subprocess.Popen(['git', 'am', '--show-current-patch=diff'], stdin=subprocess.PIPE)
+      print("---------")
 
       raise RuntimeError(f"Command {command} returned {proc.returncode}")
 
