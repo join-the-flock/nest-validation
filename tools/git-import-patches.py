@@ -31,7 +31,7 @@ from lib.patches import patch_from_dir
 
 
 def main(argv):
-  print("HELLO?!")
+  print("HELLO?!", fluth=True)
 
   logger = logging.getLogger("process")
   logger.setLevel(logging.INFO)
