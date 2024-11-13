@@ -97,16 +97,25 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
   # command = 'git ' + ' '.join(root_args) + ' am ' + ' '.join(args)
   # command = 'git ' + ' '.join(root_args) + ' am ' + ' '.join(args) + '; git am --show-current-patch=diff'
   print("Running git patch command...")
-  with subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
-    stdout, stderr = proc.communicate(patch_data.encode('utf-8'))
 
-    # Print results
-    print("Output:", stdout.decode())
-    print("Errors:", stderr.decode())
-
+  command = ['git'] + root_args + ['am'] + args
+  with subprocess.Popen(command, stdin=subprocess.PIPE) as proc:
+    proc.communicate(patch_data.encode('utf-8'))
     if proc.returncode != 0:
       print("Failed to apply patch!")
       raise RuntimeError(f"Command {command} returned {proc.returncode}")
+
+
+  # with subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
+  #   stdout, stderr = proc.communicate(patch_data.encode('utf-8'))
+
+  #   # Print results
+  #   print("Output:", stdout.decode())
+  #   print("Errors:", stderr.decode())
+
+  #   if proc.returncode != 0:
+  #     print("Failed to apply patch!")
+  #     raise RuntimeError(f"Command {command} returned {proc.returncode}")
 
 
 def import_patches(repo, ref=UPSTREAM_HEAD, **kwargs):
