@@ -93,15 +93,12 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
   if committer_email is not None:
     root_args += ['-c', 'user.email=' + committer_email]
   root_args += ['-c', 'commit.gpgsign=false']
-  command = ['git'] + root_args + ['am'] + args
+  command = ['git'] + root_args + ['am'] + args + '; git am --show-current-patch=diff'
+  print("Running git patch command...")
   with subprocess.Popen(command, stdin=subprocess.PIPE) as proc:
     proc.communicate(patch_data.encode('utf-8'))
     if proc.returncode != 0:
-      print("Failed to apply patch...")
-      print("Running 'git am --show-current-patch=diff'")
-      proc.run(['git', 'am', '--show-current-patch=diff'], stdin=subprocess.PIPE)
-      print("---------")
-
+      print("Failed to apply patch!")
       raise RuntimeError(f"Command {command} returned {proc.returncode}")
 
 
