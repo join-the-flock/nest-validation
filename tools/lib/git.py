@@ -100,7 +100,12 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
 
   command = ['git'] + root_args + ['am'] + args
   with subprocess.Popen(command, stdin=subprocess.PIPE) as proc:
-    proc.communicate(patch_data.encode('utf-8'))
+    stdout, stderr = proc.communicate(patch_data.encode('utf-8'))
+
+    # Print results
+    print("Output:", stdout.decode())
+    print("Errors:", stderr.decode())
+
     if proc.returncode != 0:
       print("Failed to apply patch!")
       raise RuntimeError(f"Command {command} returned {proc.returncode}")
