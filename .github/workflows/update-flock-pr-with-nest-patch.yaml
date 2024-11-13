@@ -20,7 +20,7 @@ jobs:
         with:
           path: 'nest'
           fetch-depth: 0 # Checkout everything to get access to the tags
-          repository: ${{github.action_repository}}
+          repository: ${{github.repository}}
           ref: ${{github.event.pull_request.head.ref}}
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,24 +56,19 @@ jobs:
           echo "Nest:"
           echo `ls -la nest`
 
-      - name: Create branch for Flock PR
+      - name: Replace existing Flock PR branch
         if: env.has_patch_changes == 'true'
         working-directory: nest/flock
         run: |
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
-          git checkout -b ${{github.event.pull_request.head.ref}}
 
-          echo "Git status:"
-          echo `git status`
-          echo ""
-          echo ""
-          echo `git log -3`
-          echo ""
-          echo ""
-          echo "Flock .gitignore:"
-          echo `cat .gitignore`
-          echo ""
+          # Delete existing PR branch.
+          # git fetch origin ${{github.event.pull_request.head.ref}}:${{github.event.pull_request.head.ref}}
+          # git branch -D ${{github.event.pull_request.head.ref}}
+
+          # Create a new branch to replace the deleted one.
+          git checkout -b ${{github.event.pull_request.head.ref}}
 
       - name: Setup Python
         if: env.has_patch_changes == 'true'
@@ -84,14 +79,7 @@ jobs:
       - name: Apply Nest patches to Flock
         if: env.has_patch_changes == 'true'
         run: |
-          echo "Apply patches..."
-          echo "Initial wd: `pwd`"
           cd nest
-          echo "Nest wd: `pwd`"
-          echo ""
-          echo ""
-          echo "Flutter .gitignore:"
-          echo `cat flock/.gitignore`
           python -u tools/git-import-patches.py patches
 
       - name: Push Flock changes to Flock repo for PR
@@ -102,5 +90,28 @@ jobs:
           # GitHub CLI.
           echo "${{ secrets.REPO_WORKFLOW_PAT }}" > token.txt
 
-          # Force push to the existing PR branch.
-          git push -f origin ${{github.event.pull_request.head.ref}}
+          # Authorize GitHub CLI for the current repository and
+          # create a pull-requests containing the updates.
+          gh auth login --with-token < token.txt
+
+          pr_exists=$(gh pr list --base main --head ${{github.event.pull_request.head.ref}} --repo ${{github.repository}} --json number --jq '.[0].number')
+
+          # If a PR exists, inform the user. Otherwise, create a new PR.
+          if [ -n "$pr_exists" ]; then
+            # Force push to the existing PR branch.
+            git push -f origin ${{github.event.pull_request.head.ref}}
+
+            echo "Flock PR already exists, and it was updated with a force push."
+          else
+            echo "Flock PR doesn't exist yet. Creating it."
+
+            # Save the PR description to a file so that we can insert newlines.
+            echo -e "${{ github.event.pull_request.body }}\n\n---\n\nThis Flock PR is derived from the patch in the following Nest PR: \n${{ github.event.pull_request.url }}" > pr_description.txt
+
+            # Create the PR.
+            gh pr create \
+              --title "${{ github.event.pull_request.title }}" \
+              --body-file "pr_description.txt" \
+              --head "${{ github.event.pull_request.head.ref }}" \
+              --base "master"
+          fi
