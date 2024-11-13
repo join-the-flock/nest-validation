@@ -92,7 +92,7 @@ jobs:
           echo ""
           echo "Flutter .gitignore:"
           echo `cat flock/.gitignore`
-          tools/git-import-patches patches
+          python -u tools/git-import-patches patches
 
       - name: Push Flock changes to Flock repo for PR
         if: env.has_patch_changes == 'true'
