@@ -34,6 +34,7 @@ import posixpath
 import re
 import subprocess
 import sys
+import time
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(SCRIPT_DIR)
@@ -117,29 +118,18 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
         stdout2, stderr2 = proc2.communicate(patch_data.encode('utf-8'))
 
         # Print results
-        print("Output:")
+        print("Output 2:")
         print(stdout2.decode())
         print("")
 
-        print("Errors:")
+        print("Errors 2:")
         print(stderr2.decode())
         print("")
       print("-----")
 
       print("Failed to apply patch!")
+      time.sleep(1)
       raise RuntimeError(f"Command {command} returned {proc.returncode}")
-
-
-  # with subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as proc:
-  #   stdout, stderr = proc.communicate(patch_data.encode('utf-8'))
-
-  #   # Print results
-  #   print("Output:", stdout.decode())
-  #   print("Errors:", stderr.decode())
-
-  #   if proc.returncode != 0:
-  #     print("Failed to apply patch!")
-  #     raise RuntimeError(f"Command {command} returned {proc.returncode}")
 
 
 def import_patches(repo, ref=UPSTREAM_HEAD, **kwargs):
