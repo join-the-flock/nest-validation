@@ -112,6 +112,10 @@ def am(repo, patch_data, threeway=False, directory=None, exclude=None,
     print("")
 
     if proc.returncode != 0:
+      print("Running git am check:")
+      subprocess.Popen(['git', '-C', './flock', 'am', '--show-current-patch=diff'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      print("")
+
       print("Failed to apply patch!")
       raise RuntimeError(f"Command {command} returned {proc.returncode}")
 
