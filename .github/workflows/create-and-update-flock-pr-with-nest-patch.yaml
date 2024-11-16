@@ -94,7 +94,7 @@ jobs:
           # create a pull-requests containing the updates.
           gh auth login --with-token < token.txt
 
-          pr_exists=$(gh pr list --base main --head ${{github.event.pull_request.head.ref}} --repo ${{github.repository}} --json number --jq '.[0].number')
+          pr_exists=$(gh pr list --state open --base main --head ${{github.event.pull_request.head.ref}} --repo ${{github.repository}} --json number --jq '.[0].number')
 
           # If a PR exists, inform the user. Otherwise, create a new PR.
           if [ -n "$pr_exists" ]; then
