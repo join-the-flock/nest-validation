@@ -1,18 +1,32 @@
-# This workflow is a continuation of "create-flock-pr-with-nest-patch.yaml", which
-# updates existing Flock PRs based on further commits to those PRs.
+# This workflow looks for changes to Flock patches within Nest, and then
+# creates or updates a parallel PR in the Flock repository.
+#
+# Nest accumulates changes to Flutter in the form of patch files. These patch
+# files are plaid on top of Flutter to create a version called Flock. Reviewing
+# patch files in isolation is counterproductive, because developers can't see
+# any of the code around the changes. This workflow plays back the patches in
+# Nest and generates a PR against Flock showing the actual diff caused by
+# those patches.
+#
+# If a PR is submitted to Nest without any changes to patches, then this
+# workflow does nothing.
+#
+# After this workflow runs, go to github.com/join-the-flock/flock and locate
+# the new PR with the Flutter diff. Review the changes there. When satisfied
+# with the changes, close the PR in Flock, and merge the PR in Nest.
 
 on:
   pull_request:
-    types: [synchronize, reopened]
+    types: [opened, synchronize, reopened]
     branches:
       - main
 
-name: update-flock-pr-from-nest-patch
+name: create-and-update-flock-pr-from-nest-patch
 permissions:
   contents: write
 
 jobs:
-  update-flock-pr-from-nest-patch:
+  create-and-update-flock-pr-from-nest-patch:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Nest
@@ -45,29 +59,14 @@ jobs:
           repository: 'join-the-flock/flock'
           ref: 'master'
           token: ${{ secrets.REPO_WORKFLOW_PAT }}
-      
-      - name: Debug file system
-        run: |
-          echo "File system..."
-          echo "Root:"
-          echo `ls -la`
-          echo ""
-          echo ""
-          echo "Nest:"
-          echo `ls -la nest`
 
-      - name: Replace existing Flock PR branch
+      - name: Create branch for Flock PR
         if: env.has_patch_changes == 'true'
         working-directory: nest/flock
         run: |
           git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
 
-          # Delete existing PR branch.
-          # git fetch origin ${{github.event.pull_request.head.ref}}:${{github.event.pull_request.head.ref}}
-          # git branch -D ${{github.event.pull_request.head.ref}}
-
-          # Create a new branch to replace the deleted one.
           git checkout -b ${{github.event.pull_request.head.ref}}
 
       - name: Setup Python
@@ -79,6 +78,7 @@ jobs:
       - name: Apply Nest patches to Flock
         if: env.has_patch_changes == 'true'
         run: |
+          echo "Apply patches..."
           cd nest
           python -u tools/git-import-patches.py patches
 
