@@ -48,16 +48,16 @@ jobs:
       - name: Fetch Flutter master
         working-directory: nest/flock
         run: |
-          git config --global user.email "join-the-flock@users.noreply.github.com"
-          git config --global user.name "rebase-robot"
+          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
 
           # Store the PAT in a file that can be accessed by the
           # GitHub CLI.
-          echo "$GITHUB_PAT" > token.txt
+          #echo "$GITHUB_PAT" > token.txt
 
           # Authorize GitHub CLI for the current repository and
           # create a pull-requests containing the updates.
-          gh auth login --with-token < token.txt
+          #gh auth login --with-token < token.txt
 
           # Setup upstream to Flutter and fetch the latest from master.
           git remote add upstream git@github.com:flutter/flutter.git
