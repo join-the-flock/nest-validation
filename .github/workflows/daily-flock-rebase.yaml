@@ -69,7 +69,10 @@ jobs:
           # Checkout a temporary branch so we can manipulate master.
           git checkout -b temp
 
-          # Delete master branch and get fresh version from Flutter.
+          # Delete master branch
+          git branch -D master
+
+          # Get fresh version from Flutter.
           git switch -c master upstream/master
 
           # Switch back to the refreshed master branch.
