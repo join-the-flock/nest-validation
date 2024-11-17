@@ -48,7 +48,7 @@ jobs:
       - name: Fetch Flutter master
         working-directory: nest/flock
         run: |
-          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
 
           # Store the PAT in a file that can be accessed by the
