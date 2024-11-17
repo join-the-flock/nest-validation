@@ -60,7 +60,7 @@ jobs:
           #gh auth login --with-token < token.txt
 
           # Setup upstream to Flutter and fetch the latest from master.
-          git remote add upstream git@github.com:flutter/flutter.git
+          git remote add upstream https://github.com:flutter/flutter.git
           git fetch upstream master
 
       - name: Delete master, recreate, replay Flock
