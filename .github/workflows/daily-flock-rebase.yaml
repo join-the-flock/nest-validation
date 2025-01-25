@@ -15,7 +15,7 @@ on:
 env:
   # The GitHub location of your Flutter fork.
   # WARNING: THIS WORKFLOW WILL DESTROY HISTORY IN THIS REPO!!
-  FLOCK_REPO: "join-the-flock/flock"
+  FLOCK_REPO: "join-the-flock/flock-validation"
 
   # A Personal Access Token (PAT) so that this action can destroy and create
   # history in the `FLOCK_REPO`.
